@@ -16,6 +16,7 @@ function App() {
       <main>
         <Container>
           <Route path='/edit' component={EditDay} />
+
           <Route path='/stat' component={Statistics} />
 
           <Route path='/' component={HomeScreen} exact />

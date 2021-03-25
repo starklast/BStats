@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class HomeScrean extends Component {
-  render() {
-    return <div>Home screan</div>
-  }
+function HomeScrean({ history, match }) {
+  console.log(history)
+  console.log(match)
+  return <div>Home screan</div>
 }
+
+export default HomeScrean
