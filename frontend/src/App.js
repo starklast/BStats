@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScrean'
 import EditDay from './screens/EditDay'
 import Statistics from './screens/Statistics'
+import EditEntity from './screens/EditEntity'
 
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
@@ -16,7 +17,7 @@ function App() {
       <main>
         <Container>
           <Route path='/edit' component={EditDay} />
-
+          <Route path='/editEntity' component={EditEntity} />
           <Route path='/stat' component={Statistics} />
 
           <Route path='/' component={HomeScreen} exact />

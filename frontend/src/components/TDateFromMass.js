@@ -75,36 +75,40 @@ import { getPresentationOfData, getValidationStatus } from '../utils/EditUtils'
 
 const renderItems = (arr, head, editEntity, curentFild, dispatch) => {
   return arr.map((item) => {
-    const rowData = head.map(({ id, name }) => {
-      const activFildClass =
-        curentFild === id && editEntity === item.id ? 'bg-primary' : ''
-      return (
-        <td
-          key={id}
-          className={activFildClass}
-          onClick={() => {
-            dispatch(
-              activEntity_activate({
-                idFild: id,
-                idItem: item.id,
-                name: name,
-                value: item[id],
-              })
-            )
-          }}
-        >
-          {getPresentationOfData(item[id])}
-        </td>
-      )
-    })
+    const rowData = head
+      .filter(({ display }) => display)
+      .map(({ id, name, inputMode }) => {
+        const activFildClass =
+          curentFild === id && editEntity === item._id ? 'bg-primary' : ''
+        return (
+          <td
+            key={id}
+            className={activFildClass}
+            onClick={() => {
+              dispatch(
+                activEntity_activate({
+                  idFild: id,
+                  idItem: item._id,
+                  name: name,
+                  value: item[id],
+                  inputMode: inputMode,
+                  data: item,
+                })
+              )
+            }}
+          >
+            {getPresentationOfData(item[id])}
+          </td>
+        )
+      })
     let activEntityClass =
-      editEntity === item.id
+      editEntity === item._id
         ? getValidationStatus(head, item)
           ? 'bg-success'
           : 'bg-warning'
         : ''
     return (
-      <tr key={item.id} className={activEntityClass}>
+      <tr key={item._id} className={activEntityClass}>
         {rowData}
       </tr>
     )

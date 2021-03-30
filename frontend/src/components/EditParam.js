@@ -99,16 +99,16 @@ function EditParam() {
   const dispatch = useDispatch()
 
   const activEntity = useSelector(selectactivEntity)
-  const { idFild, value, name } = activEntity
+  const { idFild, value, name, inputMode } = activEntity
 
   const editOptions = getProbableValuesForParam(idFild)
   const formPatern = (
     <Form>
       <Form.Group as={Row} controlId='{idFild}'>
-        <Form.Label column sm='2' xs='2'>
+        <Form.Label column sm='4' xs='4'>
           {name}
         </Form.Label>
-        <Col sm='10' xs='10'>
+        <Col sm='8' xs='8'>
           <Form.Control
             plaintext
             readOnly
@@ -131,6 +131,9 @@ function EditParam() {
             onClick={() => {
               //console.log(element)
               dispatch(activEntity_changValue(element))
+              if (inputMode !== 2) {
+                dispatch(activEntity_changEntity(1))
+              }
             }}
           >
             {getPresentationOfData(element)}
@@ -156,7 +159,7 @@ function EditParam() {
         variant='primary'
         className='mx-1 my-1'
         onClick={() => {
-          dispatch(activEntity_changValue(0))
+          dispatch(activEntity_changValue(0, true))
         }}
       >
         Clear

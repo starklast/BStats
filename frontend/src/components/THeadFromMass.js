@@ -30,10 +30,12 @@ import { useSelector } from 'react-redux'
 import { selectdayItems } from '../features/dayItems'
 
 const renderHeadItems = (arr) => {
-  return arr.map((item) => {
-    const { id, name } = item
-    return <td key={id}>{name}</td>
-  })
+  return arr
+    .filter(({ display }) => display)
+    .map((item) => {
+      const { id, name, display } = item
+      return <td key={id}>{name}</td>
+    })
 }
 function THeadFromMass() {
   const {

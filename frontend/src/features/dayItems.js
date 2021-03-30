@@ -4,6 +4,7 @@ import dataOfDay, {
   addDataItem,
   deleteDataItem,
 } from '../data/getDataOfDay'
+import { activEntity_changItem } from './activEntity'
 const slice = createSlice({
   name: 'dayItems',
   initialState: {
@@ -58,9 +59,10 @@ export const dayItems_changOnFild = ({ idItem, idFild, value }) => (
 export const dayItems_addNewItem = () => (dispatch, getState) => {
   const curentState = getState()
 
-  addDataItem(curentState.date.value)
+  const idFild = addDataItem(curentState.date.value)
 
   dispatch(dayItems_Read(curentState.date.value))
+  dispatch(activEntity_changItem(idFild))
 }
 
 export const dayItems_deleteItem = () => (dispatch, getState) => {
