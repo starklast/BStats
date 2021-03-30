@@ -15,7 +15,7 @@ const mHeadTitle = [
   { id: 'type6', name: 'др.', display: true, inputMode: 2 },
   { id: 'ukrainian', name: 'Укр', display: true, inputMode: 2 }, */
 ]
-const mHeadDetailedDataTitle = [
+const mHeadBooksDataTitle = [
   { id: '_id', name: '#', display: false },
   { id: 'idForm', name: 'Номер', display: true },
   { id: 'bookType', name: 'Тип издания.', display: true, inputMode: 3 },
@@ -27,12 +27,7 @@ let data = [
   {
     date: '2021-03-07',
     data: [],
-    detailedData: [],
-  },
-
-  {
-    date: '2021-03-09',
-    data: [],
+    booksData: [],
   },
 ]
 
@@ -54,12 +49,29 @@ const emptyTemplateData = {
   detailedData: [], */
 }
 
+const emptyTemplateBooksData = {
+  _id: '',
+  idForm: '',
+  bookType: '',
+  Count: '',
+  bookСategory: '',
+  ukrainian: '',
+}
+
+const addNewDataItem = (date) => {
+  const newDate = { date: date, data: [], booksData: [] }
+  data.push(newDate)
+  return newDate
+}
+
 function getData(date = '2021-03-08') {
   const curData = data.filter((item) => item.date === date)
   //console.log(curData)
   return {
     mHeadTitle,
     data: curData && curData.length > 0 ? [...curData[0].data] : undefined,
+    booksData:
+      curData && curData.length > 0 ? [...curData[0].booksData] : undefined,
   }
 }
 
@@ -81,8 +93,8 @@ export const addDataItem = (date) => {
   if (curData) {
     curData.data.push({ _id: newID, id: '' })
   } else {
-    const newDate = { date: date, data: [{ ...emptyTemplateData, _id: newID }] }
-    data.push(newDate)
+    newDate = addNewDataItem(date)
+    newDate.data.push({ ...emptyTemplateData, _id: newID })
   }
   return newID
 }
@@ -91,6 +103,39 @@ export const deleteDataItem = (date, idItem) => {
 
   if (curData) {
     curData.data = curData.data.filter((item) => !(item._id === idItem))
+  }
+}
+
+export const setBooksDataItem = (date, idItem, idFild, value) => {
+  const curData = data.find((item) => item.date === date)
+  if (curData) {
+    const entityIndex = curData.booksData.findIndex(
+      (item) => item._id === idItem
+    )
+    if (!(entityIndex === -1)) {
+      const newData = { ...curData.booksData[entityIndex] }
+      newData[idFild] = value
+      curData.booksData[entityIndex] = newData
+    }
+  }
+}
+
+export const addBooksDataItem = (date) => {
+  const curData = data.find((item) => item.date === date)
+  const newID = uuidv4()
+  if (curData) {
+    curData.booksData.push({ _id: newID, id: '' })
+  } else {
+    newDate = addNewDataItem(date)
+    newDate.booksData.push({ ...emptyTemplateBooksData, _id: newID })
+  }
+  return newID
+}
+export const deletBooksDataItem = (date, idItem) => {
+  const curData = data.find((item) => item.date === date)
+
+  if (curData) {
+    curData.data = curData.booksData.filter((item) => !(item._id === idItem))
   }
 }
 
