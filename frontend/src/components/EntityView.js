@@ -56,9 +56,9 @@ function EntityView() {
         <Row className='border'>
           {paramPresentation(dispatch, mHeadTitle[1], data, idFild, 4)}
           {paramPresentation(dispatch, mHeadTitle[2], data, idFild, 4)}
-          {paramPresentation(dispatch, mHeadTitle[3], data, idFild, 4)}
         </Row>
         <Row className='border'>
+          {paramPresentation(dispatch, mHeadTitle[3], data, idFild, 4)}
           {paramPresentation(dispatch, mHeadTitle[4], data, idFild, 4)}
         </Row>
         {/* <Row className='border'>

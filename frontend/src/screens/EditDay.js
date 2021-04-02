@@ -7,6 +7,7 @@ import { Table } from 'react-bootstrap'
 import EditParam from '../components/EditParam'
 import { dayItems_Read } from '../features/dayItems'
 import TablePanel from '../components/TablePanel'
+import { DATA_TYPE_DATA } from '../constants/Constats'
 
 /* export default class EditDay extends Component {
 
@@ -37,8 +38,8 @@ function EditDay() {
         <THeadFromMass />
         <TDateFromMass />
       </Table>
-      <TablePanel />
-      <EditParam />
+      <TablePanel dataType={DATA_TYPE_DATA} />
+      <EditParam dataType={DATA_TYPE_DATA} />
     </>
   )
 }

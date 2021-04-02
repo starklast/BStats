@@ -1,3 +1,17 @@
+import {
+  DATA_TYPE_DATA,
+  DATA_TYPE_BOOKS_DATA,
+  LINK_EDIT_DAY,
+  LINK_EDIT_ENTITY,
+  LINK_EDIT_BOOKS_DAY,
+  LINK_EDIT_BOOKS_ENTITY,
+} from '../constants/Constats'
+import { dayItems_addNewItem, dayItems_deleteItem } from '../features/dayItems'
+import {
+  dayItems_addNewItem as dayBooksItems_addNewItem,
+  dayItems_deleteItem as dayBooksItems_deleteItem,
+} from '../features/booksDayItems'
+
 const paramOptions = [
   { name: 'id', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] },
   { name: 'registration', pValue: ['first', 'rewrite', 'regular'] },
@@ -15,7 +29,13 @@ const paramOptions = [
   { name: 'type4', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
   { name: 'type5', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
   { name: 'type6', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-  { name: 'ukrainian', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { name: 'Count', pValue: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { name: 'ukrainian', pValue: [true, false] },
+  { name: 'bookType', pValue: ['book', 'periodical'] },
+  {
+    name: 'bookСategory',
+    pValue: ['30/70', '2/5', '3/4 6', '85/7', '82', 'др.'],
+  },
 ]
 function getProbableValuesForParam(paramName) {
   //console.log(paramName)
@@ -59,6 +79,45 @@ function getValidationStatus(mHeadTitle, entity) {
   } else {
     return false
   } */
+}
+
+export const getPropsForTablePanel = (dataType) => {
+  switch (dataType) {
+    case DATA_TYPE_BOOKS_DATA:
+      return {
+        linkEdit: LINK_EDIT_BOOKS_ENTITY,
+        linkDataView: LINK_EDIT_BOOKS_DAY,
+        to_do_add: dayBooksItems_addNewItem, //,
+        to_do_delete: dayBooksItems_deleteItem,
+      }
+    case DATA_TYPE_DATA:
+      return {
+        linkEdit: LINK_EDIT_ENTITY,
+        linkDataView: LINK_EDIT_DAY,
+        to_do_add: dayItems_addNewItem,
+        to_do_delete: dayItems_deleteItem,
+      }
+    default:
+      return { linkEdit: '/' }
+  }
+}
+
+export const getStateForActivEntity = (dataType, getState) => {
+  const { dayItems, booksDayItems, activEntity } = getState()
+  let id_newCurrentFild = 'registration'
+  if (dataType === DATA_TYPE_DATA) {
+    const {
+      value: { mHeadTitle, data },
+    } = dayItems
+    id_newCurrentFild = 'registration'
+    return { activEntity, mHeadTitle, data, id_newCurrentFild }
+  } else {
+    const {
+      value: { mHeadTitle, data },
+    } = booksDayItems
+    id_newCurrentFild = 'bookType'
+    return { activEntity, mHeadTitle, data, id_newCurrentFild }
+  }
 }
 
 export {

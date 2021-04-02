@@ -17,7 +17,7 @@ const mHeadTitle = [
 ]
 const mHeadBooksDataTitle = [
   { id: '_id', name: '#', display: false },
-  { id: 'idForm', name: 'Номер', display: true },
+  { id: 'idForm', name: 'Номер', display: false },
   { id: 'bookType', name: 'Тип издания.', display: true, inputMode: 3 },
   { id: 'Count', name: 'К-во', display: true, inputMode: 1 },
   { id: 'bookСategory', name: 'Категория', display: true, inputMode: 3 },
@@ -69,17 +69,31 @@ function getData(date = '2021-03-08') {
   //console.log(curData)
   return {
     mHeadTitle,
-    data: curData && curData.length > 0 ? [...curData[0].data] : undefined,
-    booksData:
-      curData && curData.length > 0 ? [...curData[0].booksData] : undefined,
+    data: curData && curData.length > 0 ? [...curData[0].data] : [],
+  }
+}
+
+export const getBooksData = (date = '2021-03-08') => {
+  const curData = data.filter((item) => item.date === date)
+
+  //console.log(curData)
+  return {
+    mHeadTitle: mHeadBooksDataTitle,
+    data: curData && curData.length > 0 ? [...curData[0].booksData] : undefined,
   }
 }
 
 export const setDataItem = (date, idItem, idFild, value) => {
   const curData = data.find((item) => item.date === date)
+  console.log('1')
   if (curData) {
+    console.log('2')
+    console.log(curData)
+    console.log(idItem)
+
     const entityIndex = curData.data.findIndex((item) => item._id === idItem)
     if (!(entityIndex === -1)) {
+      console.log('3')
       const newData = { ...curData.data[entityIndex] }
       newData[idFild] = value
       curData.data[entityIndex] = newData
@@ -91,11 +105,12 @@ export const addDataItem = (date) => {
   const curData = data.find((item) => item.date === date)
   const newID = uuidv4()
   if (curData) {
-    curData.data.push({ _id: newID, id: '' })
+    curData.data.push({ ...emptyTemplateData, _id: newID })
   } else {
-    newDate = addNewDataItem(date)
+    const newDate = addNewDataItem(date)
     newDate.data.push({ ...emptyTemplateData, _id: newID })
   }
+  console.log(data)
   return newID
 }
 export const deleteDataItem = (date, idItem) => {
@@ -124,14 +139,14 @@ export const addBooksDataItem = (date) => {
   const curData = data.find((item) => item.date === date)
   const newID = uuidv4()
   if (curData) {
-    curData.booksData.push({ _id: newID, id: '' })
+    curData.booksData.push({ ...emptyTemplateBooksData, _id: newID })
   } else {
-    newDate = addNewDataItem(date)
+    const newDate = addNewDataItem(date)
     newDate.booksData.push({ ...emptyTemplateBooksData, _id: newID })
   }
   return newID
 }
-export const deletBooksDataItem = (date, idItem) => {
+export const deleteBooksDataItem = (date, idItem) => {
   const curData = data.find((item) => item.date === date)
 
   if (curData) {

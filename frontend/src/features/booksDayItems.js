@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
-import dataOfDay, {
-  setDataItem,
-  addDataItem,
-  deleteDataItem,
+import { DATA_TYPE_BOOKS_DATA } from '../constants/Constats'
+import {
+  setBooksDataItem,
+  addBooksDataItem,
+  deleteBooksDataItem,
+  getBooksData,
 } from '../data/getDataOfDay'
-import { DATA_TYPE_DATA } from '../constants/Constats'
 import { activEntity_changItem } from './activEntity'
 const slice = createSlice({
-  name: 'dayItems',
+  name: 'booksDayItems',
   initialState: {
     status: 'idle',
     error: null,
@@ -41,7 +42,7 @@ export const dayItems_Read = () => (dispatch, getState) => {
   const {
     date: { value },
   } = getState()
-  let dayData = dataOfDay(value)
+  let dayData = getBooksData(value)
   console.log(`day: ${value}`)
   dispatch(dayItems_Read_Success(dayData))
 }
@@ -52,19 +53,20 @@ export const dayItems_changOnFild = ({ idItem, idFild, value }) => (
 ) => {
   const curentState = getState()
 
-  setDataItem(curentState.date.value, idItem, idFild, value)
+  setBooksDataItem(curentState.date.value, idItem, idFild, value)
 
   dispatch(dayItems_Read(curentState.date.value))
 }
 
 export const dayItems_addNewItem = () => (dispatch, getState) => {
-  //console.log('dayItems_addNewItem')
   const curentState = getState()
 
-  const idFild = addDataItem(curentState.date.value)
-
+  const idFild = addBooksDataItem(curentState.date.value)
+  console.log('read')
   dispatch(dayItems_Read(curentState.date.value))
-  dispatch(activEntity_changItem(idFild, DATA_TYPE_DATA))
+  console.log('chang')
+  dispatch(activEntity_changItem(idFild, DATA_TYPE_BOOKS_DATA))
+  console.log('changPost')
 }
 
 export const dayItems_deleteItem = () => (dispatch, getState) => {
@@ -73,11 +75,11 @@ export const dayItems_deleteItem = () => (dispatch, getState) => {
     activEntity: { idItem },
   } = getState()
 
-  deleteDataItem(value, idItem)
+  deleteBooksDataItem(value, idItem)
 
   dispatch(dayItems_Read(value))
 }
 
-export const selectdayItems = (state) => state.dayItems
+export const selectBooksDayItems = (state) => state.booksDayItems
 
 export default slice.reducer

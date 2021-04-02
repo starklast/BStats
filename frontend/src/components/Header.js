@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
+import {
+  LINK_EDIT_DAY,
+  LINK_EDIT_BOOKS_DAY,
+  LINK_STATS,
+} from '../constants/Constats'
 export class Header extends Component {
   render() {
     return (
@@ -13,12 +18,17 @@ export class Header extends Component {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto'>
-                <LinkContainer to='/edit'>
+                <LinkContainer to={LINK_EDIT_DAY}>
                   <Nav.Link>
-                    <i className='far fa-edit'></i> Edit
+                    <i className='far fa-edit'></i> Edit forms
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to='/stat'>
+                <LinkContainer to={LINK_EDIT_BOOKS_DAY}>
+                  <Nav.Link>
+                    <i className='far fa-edit'></i> Edit books
+                  </Nav.Link>
+                </LinkContainer>
+                <LinkContainer to={LINK_STATS}>
                   <Nav.Link>
                     <i className='fas fa-calculator'> </i> Statistics
                   </Nav.Link>

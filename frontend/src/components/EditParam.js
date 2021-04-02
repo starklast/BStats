@@ -95,7 +95,7 @@ import {
   getPresentationOfData,
 } from '../utils/EditUtils'
 
-function EditParam() {
+function EditParam({ dataType }) {
   const dispatch = useDispatch()
 
   const activEntity = useSelector(selectactivEntity)
@@ -132,7 +132,7 @@ function EditParam() {
               //console.log(element)
               dispatch(activEntity_changValue(element))
               if (inputMode !== 2) {
-                dispatch(activEntity_changEntity(1))
+                dispatch(activEntity_changEntity(1, dataType))
               }
             }}
           >
@@ -149,7 +149,7 @@ function EditParam() {
         variant='primary'
         className='mx-1 my-1'
         onClick={() => {
-          dispatch(activEntity_changEntity(-1))
+          dispatch(activEntity_changEntity(-1, dataType))
           //changParam(-1)
         }}
       >
@@ -168,7 +168,7 @@ function EditParam() {
         variant='primary'
         className='mx-1 my-1'
         onClick={() => {
-          dispatch(activEntity_changEntity(1))
+          dispatch(activEntity_changEntity(1, dataType))
         }}
       >
         Next

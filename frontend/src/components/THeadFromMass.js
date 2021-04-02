@@ -33,7 +33,7 @@ const renderHeadItems = (arr) => {
   return arr
     .filter(({ display }) => display)
     .map((item) => {
-      const { id, name, display } = item
+      const { id, name } = item
       return <td key={id}>{name}</td>
     })
 }

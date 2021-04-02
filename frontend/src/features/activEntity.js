@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { dayItems_changOnFild } from './dayItems'
+import { dayItems_changOnFild as booksDayItems_changOnFild } from './booksDayItems'
+import { DATA_TYPE_BOOKS_DATA, DATA_TYPE_DATA } from '../constants/Constats'
+import { getStateForActivEntity } from '../utils/EditUtils'
 const slice = createSlice({
   name: 'activEntity',
   initialState: {
@@ -8,6 +11,7 @@ const slice = createSlice({
     name: '',
     value: null,
     inputMode: null,
+    dataType: null,
     data: [],
   },
   reducers: {
@@ -18,6 +22,7 @@ const slice = createSlice({
       state.value = action.payload.value
       state.inputMode = action.payload.inputMode
       state.data = action.payload.data
+      state.dataType = action.payload.dataType
     },
     activEntity_setValue: (state, action) => {
       state.value = action.payload
@@ -28,20 +33,21 @@ const slice = createSlice({
 
 export const { activEntity_activate, activEntity_setValue } = slice.actions
 
-export const activEntity_changEntity = (changIndex) => (dispatch, getState) => {
-  const {
-    dayItems: {
-      value: { mHeadTitle, data },
-    },
-    activEntity,
-  } = getState()
+export const activEntity_changEntity = (changIndex, dataType) => (
+  dispatch,
+  getState
+) => {
+  const { mHeadTitle, data, activEntity } = getStateForActivEntity(
+    dataType,
+    getState
+  )
   const { idFild, value } = activEntity
   const newactivEntity = { ...activEntity }
   let id_newCurrentFild = idFild
   const curentIndex = mHeadTitle.findIndex((item) => item.id === idFild)
   if (curentIndex !== -1) {
     console.log(mHeadTitle[curentIndex].name)
-    if (mHeadTitle[curentIndex].id == 'registration' && value == 'regular') {
+    if (mHeadTitle[curentIndex].id === 'registration' && value === 'regular') {
       changIndex = changIndex + 2
     }
   }
@@ -68,13 +74,14 @@ export const activEntity_changEntity = (changIndex) => (dispatch, getState) => {
   }
 }
 
-export const activEntity_activateFild = (idFild) => (dispatch, getState) => {
-  const {
-    dayItems: {
-      value: { mHeadTitle, data },
-    },
-    activEntity,
-  } = getState()
+export const activEntity_activateFild = (idFild, dataType) => (
+  dispatch,
+  getState
+) => {
+  const { mHeadTitle, data, activEntity } = getStateForActivEntity(
+    dataType,
+    getState
+  )
   const newactivEntity = { ...activEntity }
   const newIndex = mHeadTitle.findIndex((item) => item.id === idFild)
   if (newIndex !== -1) {
@@ -87,24 +94,33 @@ export const activEntity_activateFild = (idFild) => (dispatch, getState) => {
       newactivEntity.value = dataItem[idFild]
       newactivEntity.data = dataItem
     }
-    dispatch(activEntity_activate({ ...newactivEntity, idFild: idFild }))
+    dispatch(
+      activEntity_activate({ ...newactivEntity, idFild: idFild, dataType })
+    )
   }
 }
 
-export const activEntity_changItem = (idItem) => (dispatch, getState) => {
+export const activEntity_changItem = (idItem, dataType) => (
+  dispatch,
+  getState
+) => {
+  console.log(dataType)
   const {
-    dayItems: {
-      value: { mHeadTitle, data },
-    },
+    mHeadTitle,
+    data,
     activEntity,
-  } = getState()
+    id_newCurrentFild,
+  } = getStateForActivEntity(dataType, getState)
+  console.log(dataType)
   const newactivEntity = { ...activEntity }
-  let id_newCurrentFild = 'registration'
+
   const newIndex = mHeadTitle.findIndex((item) => item.id === id_newCurrentFild)
 
   newactivEntity.idItem = idItem
   newactivEntity.idFild = id_newCurrentFild
 
+  console.log(mHeadTitle)
+  console.log(newIndex)
   newactivEntity.name = mHeadTitle[newIndex].name
   newactivEntity.inputMode = mHeadTitle[newIndex].inputMode
   const dataItem = data.find((element) => element._id === newactivEntity.idItem)
@@ -112,14 +128,16 @@ export const activEntity_changItem = (idItem) => (dispatch, getState) => {
     newactivEntity.value = dataItem[id_newCurrentFild]
     newactivEntity.data = dataItem
   }
-  dispatch(activEntity_activate({ ...newactivEntity }))
+  console.log(newactivEntity)
+  dispatch(activEntity_activate({ ...newactivEntity, dataType }))
+  // console.log(dataType)
 }
 
 export const activEntity_changValue = (newValue, clear = false) => (
   dispatch,
   getState
 ) => {
-  const { value, idFild, idItem, inputMode } = getState().activEntity
+  const { value, idFild, idItem, inputMode, dataType } = getState().activEntity
   console.log(parseFloat(value))
   let valueForSet = newValue
   console.log(inputMode)
@@ -142,7 +160,19 @@ export const activEntity_changValue = (newValue, clear = false) => (
     }
   }
   dispatch(activEntity_setValue(valueForSet))
-  dispatch(dayItems_changOnFild({ value: valueForSet, idFild, idItem }))
+  switch (dataType) {
+    case DATA_TYPE_BOOKS_DATA:
+      dispatch(
+        booksDayItems_changOnFild({ value: valueForSet, idFild, idItem })
+      )
+      break
+    case DATA_TYPE_DATA:
+      dispatch(dayItems_changOnFild({ value: valueForSet, idFild, idItem }))
+      break
+
+    default:
+      break
+  }
 }
 
 export const selectactivEntity = (state) => state.activEntity

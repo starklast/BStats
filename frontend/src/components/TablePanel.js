@@ -2,35 +2,44 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { dayItems_addNewItem, dayItems_deleteItem } from '../features/dayItems'
-function TablePanel() {
+import { getPropsForTablePanel } from '../utils/EditUtils'
+function TablePanel(props) {
   const dispatch = useDispatch()
+  console.log(props)
+  const {
+    linkEdit,
+    linkDataView,
+    to_do_add,
+    to_do_delete,
+  } = getPropsForTablePanel(props.dataType)
   return (
     <ButtonGroup aria-label='Table panel'>
-      <LinkContainer to='/editEntity'>
+      <LinkContainer to={linkEdit}>
         <Button
           variant='secondary'
           onClick={() => {
-            dispatch(dayItems_addNewItem())
+            //to_do_add(dispatch)
+            dispatch(to_do_add())
+            console.log('afte dispatch add')
           }}
         >
           {' '}
           Add{' '}
         </Button>
       </LinkContainer>
-      <LinkContainer to='/editEntity'>
+      <LinkContainer to={linkEdit}>
         <Button variant='secondary'> Edit </Button>
       </LinkContainer>
       <Button
         variant='secondary'
         onClick={() => {
-          dispatch(dayItems_deleteItem())
+          dispatch(to_do_delete())
         }}
       >
         {' '}
         Delete{' '}
       </Button>
-      <LinkContainer to='/edit'>
+      <LinkContainer to={linkDataView}>
         <Button variant='primary'> Confirm </Button>
       </LinkContainer>
     </ButtonGroup>
